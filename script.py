@@ -22,18 +22,15 @@ print(df['ph'])
 sns.heatmap(df.isna(), yticklabels=False, cmap='crest')
 plt.show()
 
-# Removing Null Values
-df.dropna(inplace=True)
-
 indexes = df.index
 
 # Histogram
-ph_values = df['ph']
+solids = df['Solids']
 plt.figure(figsize=(10,6))
-plt.hist(indexes, bins=30, weights=ph_values, edgecolor='white')
+plt.hist(indexes, bins=30, weights=solids, edgecolor='white')
 plt.xlabel('Index')
-plt.ylabel('pH')
-plt.title('Histogram of ph values')
+plt.ylabel('Solids')
+plt.title('Histogram of Solid values')
 plt.show()
 
 # Box Plot
@@ -45,10 +42,26 @@ plt.title('Box Plot of Hardness')
 plt.show()
 
 #Scatter Plot
-sulfate = df['Sulfate']
+chloramines = df['Chloramines']
 plt.figure(figsize=(8,6))
-plt.scatter(indexes, sulfate, alpha=0.5)
+plt.scatter(indexes, chloramines, alpha=0.5)
 plt.xlabel('Index')
-plt.ylabel('Sulfate Value')
-plt.title('Sulfate Values Scatter Plot')
+plt.ylabel('Chloramines Value')
+plt.title('Chloramines Values Scatter Plot')
 plt.show()
+
+
+# checking for null values
+null_values = df.isnull().sum()
+print("Null Values in Dataset")
+print(null_values)
+
+
+# Checking data types of values
+df[df.columns].dtypes
+
+# Replacing null values with the mean of each column
+for column in df.columns:
+    df[column] = df[column].fillna(df[column].mean())
+    
+df.isna().sum()

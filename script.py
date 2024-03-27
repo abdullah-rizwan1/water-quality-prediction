@@ -65,3 +65,43 @@ for column in df.columns:
     df[column] = df[column].fillna(df[column].mean())
     
 df.isna().sum()
+
+# Checking For Outliers
+plt.figure(figsize=(12,8))
+sns.boxplot(data=df)
+plt.title('Box Plot for Outliers Checking')
+plt.xticks(rotation=45)
+plt.show()
+
+
+
+Q1 = df.quantile(0.25)
+Q3 = df.quantile(0.75)
+
+IQR = Q3 - Q1
+
+# creating a mask
+((df < (Q1 - 1.5 * IQR)) | (df > (Q3 + 1.5 * IQR))).sum()
+mask = ((df < (Q1 - 1.5 * IQR)) | (df > (Q3 + 1.5 * IQR)))
+
+
+# Removing Outliers by replacing outliers with median value
+for i in mask.columns:
+    df[i].astype('float')
+    temp = df[i].median()
+    df.loc[mask[i], i] = temp
+
+# Check number of outliers
+((df < (Q1 - 1.5 * IQR)) | (df > (Q3 + 1.5 * IQR))).sum()
+
+# Boxplot for outliers
+plt.figure(figsize=(12,8))
+sns.boxplot(data=df)
+plt.title('Box Plot for Outliers Checking')
+plt.xticks(rotation=45)
+plt.show()
+
+# Looking for correlation
+plt.figure(figsize=(10,5))
+sns.heatmap(df.corr(),cmap='YlGnBu',annot=True)
+plt.show()
